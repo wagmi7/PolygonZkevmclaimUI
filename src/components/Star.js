@@ -1,10 +1,12 @@
 import { HStack, Link, Text, useColorMode } from '@chakra-ui/react';
+import { ConnectWallet } from '@thirdweb-dev/react';
 import { FaGithub } from 'react-icons/fa';
 
 const Star = () => {
   const { colorMode } = useColorMode();
 
   return (
+    <>
     <Link href="https://github.com/wagmi7/PolygonZkevmclaimUI" isExternal>
       <HStack
         zIndex="docked"
@@ -21,6 +23,8 @@ const Star = () => {
         <Text fontWeight="600">Star me on GitHub</Text>
       </HStack>
     </Link>
+    <ConnectWallet />
+    </>
   );
 };
 

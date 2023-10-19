@@ -12,6 +12,8 @@ import '@/styles/css/nprogress.css';
 
 import Star from '@/components/Star';
 import Footer from '@/components/Footer';
+import { PolygonZkevmTestnet } from "@thirdweb-dev/chains";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -24,6 +26,10 @@ const MyApp = ({ Component, pageProps, router }) => (
     <DefaultSeo {...SEO} />
 
     <GlobalStyle>
+    <ThirdwebProvider 
+  activeChain={ PolygonZkevmTestnet } 
+  clientId="65e4278f59fd629424e381d06900a076"
+>
       <Star />
       <AnimatePresence exitBeforeEnter>
         <MotionBox
@@ -43,6 +49,7 @@ const MyApp = ({ Component, pageProps, router }) => (
         </MotionBox>
       </AnimatePresence>
       <Footer />
+      </ThirdwebProvider>
     </GlobalStyle>
   </ChakraProvider>
 );
