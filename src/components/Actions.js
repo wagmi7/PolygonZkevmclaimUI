@@ -17,7 +17,7 @@ const Actions = ({ switchName }) => {
       <Button
         rightIcon={<FaAngleRight />}
         onClick={() =>
-          router.push(switchName === 'Second Page' ? '/second' : '/')
+          router.push(switchName === 'Second Page' ? '/claimui' : '/')
         }
       >
         {switchName}
@@ -31,7 +31,7 @@ const Actions = ({ switchName }) => {
         <Button
           leftIcon={<FaAngleLeft />}
           onClick={() =>
-            router.push(switchName === 'Second Page' ? '/second' : '/')
+            router.push(switchName === 'Second Page' ? '/claimui' : '/')
           }
         >
           {switchName}

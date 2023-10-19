@@ -1,10 +1,12 @@
 import React from 'react';
-import { ethers } from 'ethers';
+import { ethers , getDefaultProvider } from 'ethers';
 import axios from 'axios';
 import PageContainer from '@/components/PageContainer';
 import Actions from '@/components/Actions';
 
 const Claim = () => {
+  const provider = new ethers.providers.JsonRpcProvider();
+  const signer = provider.getSigner();
   // Official address polygonzkevm bridge
   const mainnetBridgeAddress = '0x2a3DD3EB832aF982ec71669E178424b10Dca2EDe';
   const testnetBridgeAddress = '0xF6BEEeBB578e214CA9E23B0e9683454Ff88Ed2A7';
@@ -16,8 +18,10 @@ const Claim = () => {
   async function main() {
     const currentProvider = ethers.provider;
     let deployer;
-    if (process.env.NEXT_PUBLIC_APP_PVTKEY) {
-      deployer = new ethers.Wallet(process.env.NEXT_PUBLIC_APP_PVTKEY, currentProvider);
+
+    const a = process.env.NEXT_PUBLIC_APP_PVTKEY;
+    if (a) {
+      deployer = new ethers.Wallet(a, currentProvider);
       console.log('Using pvtKey deployer with address: ', deployer.address);
     } else if (process.env.MNEMONIC) {
       deployer = ethers.Wallet.fromMnemonic(process.env.MNEMONIC, 'm/44\'/60\'/0\'/0/0').connect(currentProvider);
@@ -44,9 +48,11 @@ const Claim = () => {
       baseURL,
     });
 
-    const bridgeFactoryZkeEVm = await ethers.getContractFactory('PolygonZkEVMBridge', deployer);
-    const bridgeContractZkeVM = bridgeFactoryZkeEVm.attach(zkEVMBridgeContractAddress);
+    // const bridgeFactoryZkeEVm = await ethers.getContractFactory('PolygonZkEVMBridge', deployer);
+    // const bridgeContractZkeVM = bridgeFactoryZkeEVm.attach(zkEVMBridgeContractAddress);
 
+    const bridgeContractZkeVM  = new ethers.Contract(zkEVMBridgeContractAddress, contractABI, signer);
+    
     const depositAxions = await axiosreq.get(getClaimsFromAcc + pingReceiverContractAddress, {
       params: { limit: 100, offset: 0 },
     });
