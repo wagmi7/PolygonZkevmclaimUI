@@ -12,7 +12,7 @@ import '@/styles/css/nprogress.css';
 
 import Star from '@/components/Star';
 import Footer from '@/components/Footer';
-import { PolygonZkevmTestnet } from "@thirdweb-dev/chains";
+import { PolygonZkevmTestnet , PolygonZkevm , Goerli , Ethereum} from "@thirdweb-dev/chains";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -26,28 +26,30 @@ const MyApp = ({ Component, pageProps, router }) => (
     <DefaultSeo {...SEO} />
 
     <GlobalStyle>
-      <ThirdwebProvider
-        activeChain={PolygonZkevmTestnet}
-        clientId="65e4278f59fd629424e381d06900a076"
-      >
-        <Star />
-        <AnimatePresence exitBeforeEnter>
-          <MotionBox
-            key={router.route}
-            animate="enter"
-            as="main"
-            exit="exit"
-            flexGrow={1}
-            initial="initial"
-            variants={{
-              initial: { opacity: 0, y: -10 },
-              enter: { opacity: 1, y: 0 },
-              exit: { opacity: 0, y: 10 },
-            }}
-          >
-            <Component {...pageProps} />
-          </MotionBox>
-        </AnimatePresence>
+    <ThirdwebProvider 
+  activeChain={ PolygonZkevmTestnet }
+  supportedChains={ [PolygonZkevm , Goerli , Ethereum ] }
+  clientId="65e4278f59fd629424e381d06900a076"
+>
+      <Star />
+      <AnimatePresence exitBeforeEnter>
+        <MotionBox
+          key={router.route}
+          animate="enter"
+          as="main"
+          exit="exit"
+          flexGrow={1}
+          initial="initial"
+          variants={{
+            initial: { opacity: 0, y: -10 },
+            enter: { opacity: 1, y: 0 },
+            exit: { opacity: 0, y: 10 },
+          }}
+        >
+          <Component {...pageProps} />
+        </MotionBox>
+      </AnimatePresence>
+      <Footer />
       </ThirdwebProvider>
     </GlobalStyle>
   </ChakraProvider>
