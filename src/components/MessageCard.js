@@ -3,7 +3,8 @@ import { shortenText } from 'src/helpers';
 import AddressLabel from './AddressLabel';
 
 const MessageCard = ({
-    deposit
+    deposit,
+    claim
 }) => {
     console.log("Deposit", deposit);
 
@@ -11,7 +12,7 @@ const MessageCard = ({
     const destAddress = shortenText(deposit.dest_addr, 5);
 
     return (
-        <div className='border border-gray-500 w-[500px] rounded-lg p-8'>
+        <div className='border border-gray-500 w-[500px] rounded-lg p-8 h-[500px]'>
             <div>
                 {deposit.claim_tx_hash && <div className='text-green-500 text-center'>This Proof has already been claimed</div>}
                 {deposit.ready_for_claim && !deposit.claim_tx_hash && <div className='text-red-500 text-center'>Not Claimed Yet</div>}
@@ -62,7 +63,11 @@ const MessageCard = ({
             {!deposit.ready_for_claim && <h3 className='text-red-500'>
                 Not Ready to Claim. Please wait
             </h3>}
-            <button className='border rounded-lg border-gray-500 px-4 py-2 mt-8'>Claim </button>
+            {!deposit.claim_tx_hash && <button
+                onClick={() => claim(deposit)}
+                className='border rounded-lg border-gray-500 px-4 py-2 mt-8'>
+                Claim
+            </button>}
         </div>
     );
 };

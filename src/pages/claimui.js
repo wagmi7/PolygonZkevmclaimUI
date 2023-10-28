@@ -3,6 +3,7 @@ import axios from 'axios';
 import PageContainer from '@/components/PageContainer';
 import { useContract, useContractWrite } from "@thirdweb-dev/react";
 import MessageCard from '@/components/MessageCard';
+import { FormLabel, Input } from '@chakra-ui/react';
 
 const Claim = () => {
   const { contract } = useContract("0xF6BEEeBB578e214CA9E23B0e9683454Ff88Ed2A7");
@@ -37,14 +38,32 @@ const Claim = () => {
   });
 
 
+
+
+
+
+  const [contractAddress, setContractAddress] = useState('');
+  const handleInputChange = (e) => {
+    e.preventDefault();
+    console.log("E", e.target.value);
+    setContractAddress(e.target.value);
+  }
+
   async function getClaims() {
     // const bridgeFactoryZkeEVm = await ethers.getContractFactory('PolygonZkEVMBridge', deployer);
     // const bridgeContractZkeVM = bridgeFactoryZkeEVm.attach(zkEVMBridgeContractAddress);
 
+    let depositAxions;
 
-    const depositAxions = await axiosreq.get(getClaimsFromAcc + pingReceiverContractAddress, {
-      params: { limit: 100, offset: 0 },
-    });
+    if (contractAddress) {
+      depositAxions = await axiosreq.get(getClaimsFromAcc + contractAddress, {
+        params: { limit: 100, offset: 0 },
+      });
+    } else {
+      depositAxions = await axiosreq.get(getClaimsFromAcc + pingReceiverContractAddress, {
+        params: { limit: 100, offset: 0 },
+      });
+    }
 
     console.log(depositAxions, "deposit");
     const depositsArray = depositAxions.data.deposits;
@@ -57,58 +76,76 @@ const Claim = () => {
 
   }
 
-  async function claim() {
+  async function claim(deposit) {
 
-    for (let i = 0; i < depositsArray.length; i++) {
-      const currentDeposit = depositsArray[i];
-      if (currentDeposit.ready_for_claim) {
+    const currentDeposit = deposit;
+    console.log("Current Deposit", currentDeposit);
+    if (currentDeposit.ready_for_claim) {
 
-        const proofAxios = await axiosreq.get(mekrleProofString, {
-          params: { deposit_cnt: currentDeposit.deposit_cnt, net_id: currentDeposit.orig_net },
-        });
+      const proofAxios = await axiosreq.get(mekrleProofString, {
+        params: { deposit_cnt: currentDeposit.deposit_cnt, net_id: currentDeposit.orig_net },
+      });
 
-        console.log(proofAxios, "proof axios");
-        const { proof } = proofAxios.data;
+      console.log(proofAxios, "proof axios");
+      const { proof } = proofAxios.data;
 
-        const claimTx = await claimMessage({
-          args: [
-            proof.merkle_proof,
-            currentDeposit.deposit_cnt,
-            proof.main_exit_root,
-            proof.rollup_exit_root,
-            currentDeposit.orig_net,
-            currentDeposit.orig_addr,
-            currentDeposit.dest_net,
-            currentDeposit.dest_addr,
-            currentDeposit.amount,
-            currentDeposit.metadata,
-          ]
-        }
-        );
-        console.log('claim message successfully sent: ', claimTx.hash);
-        await claimTx.wait();
-        console.log('claim message successfully mined');
-      } else {
-        console.log('bridge not ready for claim');
+      const claimTx = await claimMessage({
+        args: [
+          proof.merkle_proof,
+          currentDeposit.deposit_cnt,
+          proof.main_exit_root,
+          proof.rollup_exit_root,
+          currentDeposit.orig_net,
+          currentDeposit.orig_addr,
+          currentDeposit.dest_net,
+          currentDeposit.dest_addr,
+          currentDeposit.amount,
+          currentDeposit.metadata,
+        ]
       }
+      );
+      console.log('claim message successfully sent: ', claimTx.hash);
+      await claimTx.wait();
+      console.log('claim message successfully mined');
+    } else {
+      console.log('bridge not ready for claim');
     }
   }
 
   return (
-    <PageContainer>
-      <h1>Claim Page</h1>
+    <div className='flex flex-col items-center justify-center mt-12 gap-8'>
+
+      <div className='text-[50px]'>Claim Your Assets</div>
+
+      <div className='w-[400px]' mb={2}>
+        <div className='text-[20px] mb-2'>Bridge Address</div>
+        <Input
+          borderColor='gray.500'
+          placeholder='Enter Address'
+          value={contractAddress}
+          onChange={(e) => {
+            handleInputChange(e);
+          }}
+        />
+        <button
+          className='text-[18px] border border-gray-500 mt-8 px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-700'
+          onClick={getClaims}>
+          Show Claimable Funds
+        </button>
+      </div>
+
+
+
       {/* Map through depositsArray and render deposit details */}
-      <div className='flex flex-row gap-8 flex-wrap justify-center'>
+      <div className='flex flex-row gap-8 flex-wrap justify-center my-12'>
         {depositsArray && depositsArray.map((deposit, index) => (
           <div key={index}>
-            Deposit CNT: {deposit.deposit_cnt}
-            {/* Add more deposit details as needed */}
-            <MessageCard deposit={deposit} />
+            <MessageCard deposit={deposit} claim={claim} />
           </div>
         ))}
       </div>
-      <button onClick={getClaims}>Show Claimable Funds</button>
-    </PageContainer>
+
+    </div>
   );
 };
 

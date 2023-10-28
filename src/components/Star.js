@@ -11,9 +11,9 @@ const Star = () => {
   return (
     <div className='flex flex-row items-center justify-between p-4 bg-zinc-900'>
       <Button onClick={() =>
-        router.push('/claimui')
+        router.push('/')
       } className='text-[24px]'>
-        Claim Here
+        Home Page
       </Button>
 
       <div className='flex gap-4'>
