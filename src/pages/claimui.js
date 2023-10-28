@@ -38,10 +38,6 @@ const Claim = () => {
   });
 
 
-
-
-
-
   const [contractAddress, setContractAddress] = useState('');
   const handleInputChange = (e) => {
     e.preventDefault();
@@ -115,10 +111,10 @@ const Claim = () => {
   return (
     <div className='flex flex-col items-center justify-center mt-12 gap-8'>
 
-      <div className='text-[50px]'>Claim Your Assets</div>
+      <div className='text-[50px]'>Claim Your Assets across 4 Lxly Chains</div>
 
       <div className='w-[400px]' mb={2}>
-        <div className='text-[20px] mb-2'>Bridge Address</div>
+        <div className='text-[20px] mb-2'>Enter the Bridge Address</div>
         <Input
           borderColor='gray.500'
           placeholder='Enter Address'
@@ -127,6 +123,14 @@ const Claim = () => {
             handleInputChange(e);
           }}
         />
+        <div className='flex flex-col items-center justify-center mt-12 gap-8'>
+          {!contractAddress && <>
+          <code>Example </code>
+          <code>0x977bb1ba20d6df6e8a07178605c6a75618c705ef polygonzkevmERC20Bridge</code>
+          <code>0x4a280052ecd397487e2c77b41cdcf7a5748c3f32 gorelliERC20Bridge</code>
+          <code>0x6D792cb4d69cC3E1e9A2282106Cc0491E796655e polygonzkevmERC721Bridge</code>
+          </>}
+        </div>
         <button
           className='text-[18px] border border-gray-500 mt-8 px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-700'
           onClick={getClaims}>

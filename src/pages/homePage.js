@@ -1,5 +1,3 @@
-'use client'
-
 import {
     Container,
     Stack,
@@ -32,6 +30,7 @@ export default function HomePage() {
                         lineHeight={1.1}
                         fontWeight={600}
                         fontSize={{ base: '3xl', sm: '4xl', lg: '6xl' }}>
+
                         <Text
                             as={'span'}
                             position={'relative'}
@@ -45,17 +44,15 @@ export default function HomePage() {
                                 bg: 'red.400',
                                 zIndex: -1,
                             }}>
-                            Write once,
+                            Access Your XChain Assets
                         </Text>
                         <br />
                         <Text as={'span'} color={'red.400'}>
-                            use everywhere!
+                            with Ease!
                         </Text>
                     </Heading>
                     <Text color={'gray.500'}>
-                        Snippy is a rich coding snippets app that lets you create your own code
-                        snippets, categorize them, and even sync them in the cloud so you can use them
-                        anywhere. All that is free!
+                        PolygonZkevmclaimUI offers a user-friendly interface to claim and manage your assets across multiple chains, including PolygonZkevmtestnet, Goerli, PolygonZkevm, and Ethereum. Powered by the LXLY Bridge for seamless cross-chain communication.
                     </Text>
                     <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: 'column', sm: 'row' }}>
                         <Button
@@ -69,7 +66,7 @@ export default function HomePage() {
                             color={'white'}
                             bg={'red.500'}
                             _hover={{ bg: 'red.700' }}>
-                            Get started
+                            Get Started
                         </Button>
                         <Button
                             rounded={'full'}
@@ -119,10 +116,20 @@ export default function HomePage() {
                             alt={'Hero Image'}
                             fit={'cover'}
                             align={'center'}
-                            w={'100%'}
+                            w={'50%'}
                             h={'100%'}
                             src={
-                                'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
+                                'https://pbs.twimg.com/profile_images/1659302751518564352/uyc8WKxc_400x400.png' 
+                            }
+                        />
+                        <Image
+                            alt={'Hero Image'}
+                            fit={'cover'}
+                            align={'center'}
+                            w={'60%'}
+                            h={'100%'}
+                            src={
+                                'https://pbs.twimg.com/profile_images/1659302751518564352/uyc8WKxc_400x400.png' 
                             }
                         />
                     </Box>
