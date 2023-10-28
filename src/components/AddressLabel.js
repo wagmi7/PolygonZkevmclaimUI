@@ -71,12 +71,12 @@ const AddressLabel = ({
             //     <Link href="https://example.com" passHref>
             //     <a target="_blank" rel="noopener noreferrer">Link text</a>
             //   </Link>
-                <Link href={blockExplorerLink} passHref><MdOpenInNew style={{ cursor: 'pointer' }} />
-                </Link>
+                <a href={blockExplorerLink} rel='noopener noreferrer'><MdOpenInNew style={{ cursor: 'pointer' }} />
+                </a>
             )}
 
             {showBlockExplorerLink && isTransactionAddress && (
-                <Link target='_blank' href={txhashLink} passHref><MdOpenInNew style={{ cursor: 'pointer' }} /></Link>
+                <a target='_blank' href={txhashLink} rel='noopener noreferrer'><MdOpenInNew style={{ cursor: 'pointer' }} /></a>
             )}
 
             {showCopyIntoClipboardButton && (
@@ -88,9 +88,9 @@ const AddressLabel = ({
                 </div>)}
 
             {enableTransaction && (
-                <Link href={`/transactions/${address}`}>
+                <a href={`/transactions/${address}`} target='_blank' rel='noopener noreferrer'>
                     {<ImNewTab />}
-                </Link>
+                </a>
 
             )}
 

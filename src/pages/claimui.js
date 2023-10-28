@@ -166,10 +166,10 @@ const Claim = () => {
         </button>
         <div className='flex flex-col items-center justify-center mt-12 gap-8'>
           {!contractAddress && <>
-          <code>Example </code>
-          <code>0x977bb1ba20d6df6e8a07178605c6a75618c705ef polygonzkevmERC20Bridge</code>
+          <code>Example Bridges</code>
+          <code>0x977bb1ba20d6df6e8a07178605c6a75618c705ef polygonzkevmtestnetERC20Bridge</code>
           <code>0x4a280052ecd397487e2c77b41cdcf7a5748c3f32 gorelliERC20Bridge</code>
-          <code>0x6D792cb4d69cC3E1e9A2282106Cc0491E796655e polygonzkevmERC721Bridge</code>
+          <code>0x6D792cb4d69cC3E1e9A2282106Cc0491E796655e polygonzkevmtestnetERC721Bridge</code>
           </>}
         </div>
       </div>
