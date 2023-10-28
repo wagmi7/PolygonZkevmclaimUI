@@ -12,12 +12,21 @@ import {
     createIcon,
     IconProps,
     useColorModeValue,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 export default function HomePage() {
     const router = useRouter();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
     return (
         <Container maxW={'7xl'}>
             <Stack
@@ -64,18 +73,37 @@ export default function HomePage() {
                             fontWeight={'normal'}
                             px={6}
                             color={'white'}
-                            bg={'red.500'}
+                            bg={'purple.500'}
                             _hover={{ bg: 'red.700' }}>
-                            Get Started
+                            👆🏻 Get Started 
                         </Button>
+
                         <Button
+                            onClick={openModal}
                             rounded={'full'}
                             size={'lg'}
                             fontWeight={'normal'}
                             px={6}
-                            leftIcon={<PlayIcon h={4} w={4} color={'gray.300'} />}>
+                            leftIcon={<PlayIcon h={4} w={4} color={'blue.300'} />}>
                             How It Works
                         </Button>
+
+                        <Modal isOpen={isModalOpen} onClose={closeModal}>
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader>How to Claim your XChain Assets</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody>
+                                    Step 1: Connect your Wallet to the specific chain on which you want to claim 📪
+                                </ModalBody>
+                                <ModalBody>
+                                    Step 2: Enter the ERC-20/721 Bridge Address on which you want to check claims 📬
+                                </ModalBody>
+                                <ModalBody>
+                                    Step 3: Click on the claim button to generate zkproof and claim your assets 🔥 
+                                </ModalBody>
+                            </ModalContent>
+                        </Modal>
                     </Stack>
                 </Stack>
                 <Flex
@@ -106,7 +134,7 @@ export default function HomePage() {
                             _hover={{ bg: 'transparent' }}
                             icon={<PlayIcon w={12} h={12} />}
                             size={'lg'}
-                            color={'white'}
+                            color={'blue.300'}
                             position={'absolute'}
                             left={'50%'}
                             top={'50%'}
@@ -116,20 +144,10 @@ export default function HomePage() {
                             alt={'Hero Image'}
                             fit={'cover'}
                             align={'center'}
-                            w={'50%'}
-                            h={'100%'}
+                            w={'100%'}
+                            h={'120%'}
                             src={
-                                'https://pbs.twimg.com/profile_images/1659302751518564352/uyc8WKxc_400x400.png' 
-                            }
-                        />
-                        <Image
-                            alt={'Hero Image'}
-                            fit={'cover'}
-                            align={'center'}
-                            w={'60%'}
-                            h={'100%'}
-                            src={
-                                'https://pbs.twimg.com/profile_images/1659302751518564352/uyc8WKxc_400x400.png' 
+                                'https://github.com/wagmi7/PolygonZkevmclaimUI/assets/94379406/e417b8e6-524d-4bbb-8331-a27fde85fa78' 
                             }
                         />
                     </Box>

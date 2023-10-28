@@ -1,8 +1,8 @@
 {
-  "name": "next-chakra-starter",
+  "name": "polygonx-claim-ui",
   "description": "An opinionated simple starter / template project with Next.js and Chakra UI.",
   "version": "1.0.0",
-  "repository": "git@github.com:wagmi7/next-chakra-starter.git",
+  "repository": "git@github.com:wagmi7/PolygonZkevmclaimUI.git",
   "private": true,
   "scripts": {
     "dev": "next dev",

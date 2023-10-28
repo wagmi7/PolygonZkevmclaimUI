@@ -4,11 +4,14 @@ import PageContainer from '@/components/PageContainer';
 import { useContract, useContractWrite } from "@thirdweb-dev/react";
 import MessageCard from '@/components/MessageCard';
 import { FormLabel, Input } from '@chakra-ui/react';
+import { Select } from '@chakra-ui/react';
 
 const Claim = () => {
   const { contract } = useContract("0xF6BEEeBB578e214CA9E23B0e9683454Ff88Ed2A7");
   const { mutateAsync: claimMessage, isLoading } = useContractWrite(contract, "claimMessage");
   const [depositsArray, setDepositsArray] = useState();
+  const [fromchain , setFromchain] = useState('5');
+  const [tochain , setTochain] = useState('1442');
 
   // Official address polygonzkevm bridge
   const mainnetBridgeAddress = '0x2a3DD3EB832aF982ec71669E178424b10Dca2EDe';
@@ -17,12 +20,11 @@ const Claim = () => {
   const mekrleProofString = '/merkle-proof';
   const getClaimsFromAcc = '/bridges/';
   const pingReceiverContractAddress = '0x6D792cb4d69cC3E1e9A2282106Cc0491E796655e';
-  console.log(process.env.NEXT_PUBLIC_APP_PVTKEY);
 
   let baseURL;
   let zkEVMBridgeContractAddress;
   const networkName = 'goerli';
-
+  console.log(fromchain , tochain ,"claim ui passed")
   // Use mainnet bridge address
   if (networkName === 'polygonZKEVMMainnet' || networkName === 'mainnet') {
     zkEVMBridgeContractAddress = mainnetBridgeAddress;
@@ -45,6 +47,21 @@ const Claim = () => {
     setContractAddress(e.target.value);
   }
 
+  const handleFromChainChange = (event) => {
+    console.log(event.target.value,"change");
+    setFromchain(event.target.value);
+  };
+
+  const handleToChainChange = (event) => {
+    setTochain(event.target.value);
+  };
+
+  const chainOptions = [
+    { label: 'Polygon ZKEVM Mainnet', value: '1101' },
+    { label: 'Polygon ZKEVM Testnet', value: '1442' },
+    { label: 'Goerli', value: '5' },
+    { label: 'ETHEREUM', value: '1' },
+  ];
   async function getClaims() {
     // const bridgeFactoryZkeEVm = await ethers.getContractFactory('PolygonZkEVMBridge', deployer);
     // const bridgeContractZkeVM = bridgeFactoryZkeEVm.attach(zkEVMBridgeContractAddress);
@@ -114,7 +131,26 @@ const Claim = () => {
       <div className='text-[50px]'>Claim Your Assets across 4 Lxly Chains</div>
 
       <div className='w-[400px]' mb={2}>
-        <div className='text-[20px] mb-2'>Enter the Bridge Address</div>
+
+      <h2>Select the From Chain</h2>
+      <Select value={fromchain} onChange={handleFromChainChange}>
+        {chainOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </Select>
+
+      <h2>Select the To Chain</h2>
+      <Select value={tochain} onChange={handleToChainChange}>
+        {chainOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </Select>
+
+      <div className='text-[20px] mb-2'>Enter the Bridge Address</div>
         <Input
           borderColor='gray.500'
           placeholder='Enter Address'
@@ -123,6 +159,11 @@ const Claim = () => {
             handleInputChange(e);
           }}
         />
+        <button
+          className='text-[18px] border border-gray-500 mt-8 px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-700'
+          onClick={getClaims}>
+          Show Claimable Funds
+        </button>
         <div className='flex flex-col items-center justify-center mt-12 gap-8'>
           {!contractAddress && <>
           <code>Example </code>
@@ -131,20 +172,14 @@ const Claim = () => {
           <code>0x6D792cb4d69cC3E1e9A2282106Cc0491E796655e polygonzkevmERC721Bridge</code>
           </>}
         </div>
-        <button
-          className='text-[18px] border border-gray-500 mt-8 px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-700'
-          onClick={getClaims}>
-          Show Claimable Funds
-        </button>
       </div>
-
 
 
       {/* Map through depositsArray and render deposit details */}
       <div className='flex flex-row gap-8 flex-wrap justify-center my-12'>
         {depositsArray && depositsArray.map((deposit, index) => (
           <div key={index}>
-            <MessageCard deposit={deposit} claim={claim} />
+            <MessageCard deposit={deposit} claim={claim} fromchain={fromchain} tochain={tochain}/>
           </div>
         ))}
       </div>
