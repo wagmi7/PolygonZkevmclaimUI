@@ -5,13 +5,14 @@ import { useContract, useContractWrite } from "@thirdweb-dev/react";
 import MessageCard from '@/components/MessageCard';
 import { FormLabel, Input } from '@chakra-ui/react';
 import { Select } from '@chakra-ui/react';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Claim = () => {
   const { contract } = useContract("0xF6BEEeBB578e214CA9E23B0e9683454Ff88Ed2A7");
   const { mutateAsync: claimMessage, isLoading } = useContractWrite(contract, "claimMessage");
   const [depositsArray, setDepositsArray] = useState();
-  const [fromchain , setFromchain] = useState('5');
-  const [tochain , setTochain] = useState('1442');
+  const [fromchain, setFromchain] = useState('5');
+  const [tochain, setTochain] = useState('1442');
 
   // Official address polygonzkevm bridge
   const mainnetBridgeAddress = '0x2a3DD3EB832aF982ec71669E178424b10Dca2EDe';
@@ -24,7 +25,7 @@ const Claim = () => {
   let baseURL;
   let zkEVMBridgeContractAddress;
   const networkName = 'goerli';
-  console.log(fromchain , tochain ,"claim ui passed")
+  console.log(fromchain, tochain, "claim ui passed")
   // Use mainnet bridge address
   if (networkName === 'polygonZKEVMMainnet' || networkName === 'mainnet') {
     zkEVMBridgeContractAddress = mainnetBridgeAddress;
@@ -48,7 +49,7 @@ const Claim = () => {
   }
 
   const handleFromChainChange = (event) => {
-    console.log(event.target.value,"change");
+    console.log(event.target.value, "change");
     setFromchain(event.target.value);
   };
 
@@ -81,6 +82,7 @@ const Claim = () => {
     console.log(depositAxions, "deposit");
     const depositsArray = depositAxions.data.deposits;
     setDepositsArray(depositsArray);
+    toast.success('Successfully created!');
 
     if (depositsArray.length === 0) {
       console.log('Not ready yet!');
@@ -118,47 +120,62 @@ const Claim = () => {
       }
       );
       console.log('claim message successfully sent: ', claimTx.hash);
+      toast.loading('Waiting...');
       await claimTx.wait();
       console.log('claim message successfully mined');
+      toast.success('Claim message successfully mined');
     } else {
       console.log('bridge not ready for claim');
+      toast.error('Bridge not ready for claim');
     }
   }
 
+  const notify = () => toast('Here is your toast.');
+
   return (
     <div className='flex flex-col items-center justify-center mt-12 gap-8'>
+      <button onClick={notify}>Make me a toast</button>
+      <Toaster />
+
+
 
       <div className='text-[50px]'>Claim Your Assets across 4 Lxly Chains</div>
 
-      <div className='w-[400px]' mb={2}>
+      <div className='w-[400px] flex flex-col gap-8' mb={2}>
 
-      <h2>Select the From Chain</h2>
-      <Select value={fromchain} onChange={handleFromChainChange}>
-        {chainOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </Select>
+        <div>
+          <h2>Select the From Chain</h2>
+          <Select value={fromchain} onChange={handleFromChainChange}>
+            {chainOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+        </div>
 
-      <h2>Select the To Chain</h2>
-      <Select value={tochain} onChange={handleToChainChange}>
-        {chainOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </Select>
+        <div>
+          <h2>Select the To Chain</h2>
+          <Select value={tochain} onChange={handleToChainChange}>
+            {chainOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+        </div>
 
-      <div className='text-[20px] mb-2'>Enter the Bridge Address</div>
-        <Input
-          borderColor='gray.500'
-          placeholder='Enter Address'
-          value={contractAddress}
-          onChange={(e) => {
-            handleInputChange(e);
-          }}
-        />
+        <div>
+          <div className='text-[20px] mb-2'>Enter the Bridge Address</div>
+          <Input
+            borderColor='gray.500'
+            placeholder='Enter Address'
+            value={contractAddress}
+            onChange={(e) => {
+              handleInputChange(e);
+            }}
+          />
+        </div>
         <button
           className='text-[18px] border border-gray-500 mt-8 px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-700'
           onClick={getClaims}>
@@ -166,10 +183,10 @@ const Claim = () => {
         </button>
         <div className='flex flex-col items-center justify-center mt-12 gap-8'>
           {!contractAddress && <>
-          <code>Example Bridges</code>
-          <code>0x977bb1ba20d6df6e8a07178605c6a75618c705ef polygonzkevmtestnetERC20Bridge</code>
-          <code>0x4a280052ecd397487e2c77b41cdcf7a5748c3f32 gorelliERC20Bridge</code>
-          <code>0x6D792cb4d69cC3E1e9A2282106Cc0491E796655e polygonzkevmtestnetERC721Bridge</code>
+            <code>Example Bridges</code>
+            <code>0x977bb1ba20d6df6e8a07178605c6a75618c705ef polygonzkevmtestnetERC20Bridge</code>
+            <code>0x4a280052ecd397487e2c77b41cdcf7a5748c3f32 gorelliERC20Bridge</code>
+            <code>0x6D792cb4d69cC3E1e9A2282106Cc0491E796655e polygonzkevmtestnetERC721Bridge</code>
           </>}
         </div>
       </div>
@@ -179,7 +196,12 @@ const Claim = () => {
       <div className='flex flex-row gap-8 flex-wrap justify-center my-12'>
         {depositsArray && depositsArray.map((deposit, index) => (
           <div key={index}>
-            <MessageCard deposit={deposit} claim={claim} fromchain={fromchain} tochain={tochain}/>
+            <MessageCard
+              deposit={deposit}
+              claim={claim}
+              fromchain={fromchain}
+              tochain={tochain}
+            />
           </div>
         ))}
       </div>

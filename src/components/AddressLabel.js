@@ -9,52 +9,39 @@ import { shortenText } from 'src/helpers';
 
 const AddressLabel = ({
     address,
-    isTransactionAddress,
+    isTransactionAddress = false,
     isNormalAddress = false,
     showBlockExplorerLink,
     showCopyIntoClipboardButton = true,
     useFullAddress = false,
     enableTransaction = false,
-    fromchain,
-    tochain
+    chainId,
 }) => {
-    const [frombaseURL , setFrombaseURL] = useState('https://goerli.etherscan.io/');
-    const [tobaseURL , setTobaseURL] = useState('https://testnet-zkevm.polygonscan.com/');
     const addressLabel = shortenText(address, 5);
-    console.log(frombaseURL , tobaseURL , fromchain , tochain, "passed values");
-    // const blockExplorerLink = `${chain?.blockExplorerUrl}/${isTransactionAddress ? 'tx' : 'address'
-    //     }/${address}`
-
-    const blockExplorerLink = `${tobaseURL}${isNormalAddress && 'address'}/${address}`;
-
-    const txhashLink = `${frombaseURL}${isTransactionAddress && 'tx'}/${address}`;
-
-    console.log(blockExplorerLink, txhashLink);
     const [isCopied, setIsCopied] = useState(false);
+    const [baseURL, setBaseURL] = useState('');
 
     useEffect(() => {
-        if (fromchain === '5') {
-            setFrombaseURL("https://goerli.etherscan.io/");
-        } else if (fromchain === '1') {
-            setFrombaseURL("https://etherscan.io/");
-        } else if (fromchain === '1442') {
-            setFrombaseURL("https://testnet-zkevm.polygonscan.com");
-        } else {
-            setFrombaseURL("https://zkevm.polygonscan.com/");
+        if (chainId) {
+            switch (chainId) {
+                case '5':
+                    setBaseURL('https://goerli.etherscan.io');
+                    break;
+                case '1':
+                    setBaseURL('https://etherscan.io');
+                    break;
+                case '1442':
+                    setBaseURL('https://testnet-zkevm.polygonscan.com');
+                    break;
+                case '1101':
+                    setBaseURL('https://zkevm.polygonscan.com');
+                    break;
+                default:
+                    setBaseURL('');
+                    break;
+            }
         }
-    }, [fromchain]);
-
-    useEffect(() => {
-        if (tochain === '5') {
-            setTobaseURL("https://goerli.etherscan.io/");
-        } else if (tochain === '1') {
-            setTobaseURL("https://etherscan.io/tx/");
-        } else if (tochain === '1442') {
-            setTobaseURL("https://testnet-zkevm.polygonscan.com");
-        } else {
-            setTobaseURL("https://zkevm.polygonscan.com/");
-        }
-    }, [tochain]);
+    }, [chainId])
 
     useEffect(() => {
         if (isCopied) {
@@ -67,17 +54,36 @@ const AddressLabel = ({
     return (
         <div className='flex flex-row gap-1 items-center text-gray-500 hover:text-white'>
             <span>{useFullAddress ? address : addressLabel}</span>
+
             {showBlockExplorerLink && isNormalAddress && (
-            //     <Link href="https://example.com" passHref>
-            //     <a target="_blank" rel="noopener noreferrer">Link text</a>
-            //   </Link>
-                <a href={blockExplorerLink} rel='noopener noreferrer'><MdOpenInNew style={{ cursor: 'pointer' }} />
-                </a>
+                <>
+                    <a href={
+                        `${baseURL}/address/${address}`
+                    } rel='noopener noreferrer'><MdOpenInNew style={{ cursor: 'pointer' }} />
+                    </a>
+                </>
             )}
 
             {showBlockExplorerLink && isTransactionAddress && (
-                <a target='_blank' href={txhashLink} rel='noopener noreferrer'><MdOpenInNew style={{ cursor: 'pointer' }} /></a>
+                <a href={
+                    `${baseURL}/tx/${address}`
+                } rel='noopener noreferrer'><MdOpenInNew style={{ cursor: 'pointer' }} />
+                </a>
             )}
+
+
+
+            {/* {showBlockExplorerLink && isNormalAddress && (
+                //     <Link href="https://example.com" passHref>
+                //     <a target="_blank" rel="noopener noreferrer">Link text</a>
+                //   </Link>
+                <a href={blockExplorerLink} rel='noopener noreferrer'><MdOpenInNew style={{ cursor: 'pointer' }} />
+                </a>
+            )} */}
+
+            {/* {showBlockExplorerLink && isTransactionAddress && (
+                <a target='_blank' href={txhashLink} rel='noopener noreferrer'><MdOpenInNew style={{ cursor: 'pointer' }} /></a>
+            )} */}
 
             {showCopyIntoClipboardButton && (
                 <div onClick={() => {

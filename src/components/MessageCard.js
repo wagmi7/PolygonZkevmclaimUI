@@ -8,8 +8,8 @@ const MessageCard = ({
     deposit,
     claim
 }) => {
-    console.log("Deposit", deposit);
-    console.log(fromchain , tochain ,"messagecard")
+    // console.log("Deposit", deposit);
+    console.log(fromchain, tochain, "messagecard")
     const originAddress = shortenText(deposit.orig_addr, 5);
     const destAddress = shortenText(deposit.dest_addr, 5);
 
@@ -28,7 +28,13 @@ const MessageCard = ({
                     {deposit.claim_tx_hash && <div>
                         <div className='flex flex-row justify-between my-2'>
                             <h3 className='text-gray-400'>Claimed txhash:</h3>
-                            <AddressLabel address={deposit.claim_tx_hash} isTransactionAddress showBlockExplorerLink fromchain={fromchain} tochain={tochain}/>
+                            <AddressLabel
+                                chainId={tochain}
+                                address={deposit.claim_tx_hash}
+                                isTransactionAddress
+                                showBlockExplorerLink
+
+                            />
                         </div>
                     </div>}
                     {!deposit.claim_tx_hash && <div>
@@ -43,15 +49,30 @@ const MessageCard = ({
             <div>
                 <div className='flex flex-row justify-between my-2'>
                     <h3 className='text=[18px] text-gray-400'>Minted Txhash: </h3>
-                    <AddressLabel address={deposit.tx_hash} isTransactionAddress showBlockExplorerLink fromchain={fromchain} tochain={tochain} />
+                    <AddressLabel
+                        chainId={fromchain}
+                        address={deposit.tx_hash}
+                        isTransactionAddress
+                        showBlockExplorerLink
+                    />
                 </div>
                 <div className='flex flex-row justify-between my-2'>
                     <h3 className='text=[18px] text-gray-400'>Origin Address: </h3>
-                    <AddressLabel address={deposit.orig_addr} showBlockExplorerLink isNormalAddress fromchain={fromchain} tochain={tochain} />
+                    <AddressLabel
+                        chainId={fromchain}
+                        address={deposit.orig_addr}
+                        showBlockExplorerLink
+                        isNormalAddress
+                    />
                 </div>
                 <div className='flex flex-row justify-between my-2'>
                     <h3 className='text=[18px] text-gray-400'>Destination Address: </h3>
-                    <AddressLabel address={deposit.dest_addr} showBlockExplorerLink isNormalAddress fromchain={fromchain} tochain={tochain} />
+                    <AddressLabel
+                        chainId={tochain}
+                        address={deposit.dest_addr}
+                        showBlockExplorerLink
+                        isNormalAddress
+                    />
                 </div>
 
                 <div className='flex flex-row justify-between my-2'>
