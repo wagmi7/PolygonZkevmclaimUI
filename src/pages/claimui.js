@@ -18,6 +18,7 @@ const Claim = () => {
     console.log(process.env.NEXT_PUBLIC_APP_PVTKEY);
 
     let baseURL;
+    let zkEVMBridgeContractAddress;
     const networkName = 'goerli';
 
     // Use mainnet bridge address
