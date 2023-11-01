@@ -1,30 +1,31 @@
-import { HStack, Link, Text, useColorMode } from '@chakra-ui/react';
 import { ConnectWallet } from '@thirdweb-dev/react';
 import { FaGithub } from 'react-icons/fa';
+import { Button, ButtonGroup, useColorMode } from '@chakra-ui/react';
+import { FaRegMoon, FaRegSun } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 const Star = () => {
-  const { colorMode } = useColorMode();
+  const router = useRouter();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <>
-    <Link href="https://github.com/wagmi7/PolygonZkevmclaimUI" isExternal>
-      <HStack
-        zIndex="docked"
-        pos="fixed"
-        py={3}
-        px={4}
-        bg={colorMode === 'light' ? 'gray.100' : 'gray.800'}
-        borderBottomWidth="3px"
-        borderRightWidth="3px"
-        borderColor={colorMode === 'light' ? 'gray.800' : 'gray.100'}
-        roundedBottomRight="3xl"
-      >
-        <FaGithub size="24px" />
-        <Text fontWeight="600">Star me on GitHub</Text>
-      </HStack>
-    </Link>
-    <ConnectWallet />
-    </>
+    <div className='flex flex-row items-center justify-between p-4 bg-zinc-900'>
+      <Button onClick={() =>
+        router.push('/claimui')
+      } className='text-[24px]'>
+        Claim Here
+      </Button>
+
+      <div className='flex gap-4'>
+        <Button
+          onClick={toggleColorMode}
+        >
+          {colorMode === 'light' ? <FaRegMoon /> : <FaRegSun />}
+        </Button>
+        <ConnectWallet />
+      </div>
+
+    </div>
   );
 };
 

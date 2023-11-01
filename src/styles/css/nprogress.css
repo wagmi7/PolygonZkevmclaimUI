@@ -1,4 +1,9 @@
 /* Make clicks pass-through */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 #nprogress {
   pointer-events: none;
 }
